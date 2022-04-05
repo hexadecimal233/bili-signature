@@ -20,7 +20,7 @@ class BilibiliApi(object):
 
     # api地址
     def __init__(self, sessdata, bilijct):
-        self.getFansUrl = 'http://api.bilibili.com/x/web-interface/nav/stat'
+        self.getFansUrl = 'https://api.bilibili.com/x/web-interface/nav/stat'
         self.setSignatureUrl = 'https://api.bilibili.com/x/member/web/sign/update'
         self.initHeaders(sessdata, bilijct)
     
@@ -28,8 +28,8 @@ class BilibiliApi(object):
     def initHeaders(self, sessdata, bilijct):
         cookies = "SESSDATA=%s; bili_jct=%s" % (sessdata, bilijct)
         self.headers = {
-        'Cookie': cookies,
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36'
+            'Cookie': cookies,
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36'
         }
     
     #初始化Post参数
@@ -43,10 +43,9 @@ class BilibiliApi(object):
     #获取账号粉丝数
     def getFans(self):
         response = requests.get(url=self.getFansUrl, headers=self.headers, timeout=10).json()
-        followers = response['data']['follower']
-        if (followers == -1):
+        if (response['code'] != 0):
             raise Exception(ValueError, '粉丝数获取错误')
-        return followers
+        return response['data']['follower']
 
     #修改账号个人简介
     def setSignature(self):
@@ -69,15 +68,15 @@ def getCurrTime():
 
 if __name__ == '__main__':
     print(rf"""
-        {Fore.LIGHTMAGENTA_EX}╭─────────────────────────────────────────────────────────────────────╮
-        | {Fore.LIGHTCYAN_EX}哔哩哔哩自动更改个人简介 原作者: wuziqian11 二改者: ThebestkillerTBK{Fore.LIGHTMAGENTA_EX}| 
-        | {Fore.LIGHTCYAN_EX}本程序可以根据自己的哔哩哔哩账号的粉丝数，自动更改您的个人简介。    {Fore.LIGHTMAGENTA_EX}| 
-        ╰─────────────────────────────────────────────────────────────────────╯
+        {Fore.LIGHTMAGENTA_EX}╭──────────────────────────────────────────────────────────────────────╮
+        | {Fore.LIGHTCYAN_EX}哔哩哔哩自动更改个人简介 原作者: wuziqian211 二改者: ThebestkillerTBK{Fore.LIGHTMAGENTA_EX}| 
+        | {Fore.LIGHTCYAN_EX}本程序可以根据自己的哔哩哔哩账号的粉丝数，自动更改您的个人简介。     {Fore.LIGHTMAGENTA_EX}| 
+        ╰──────────────────────────────────────────────────────────────────────╯
     """)
     print(Style.RESET_ALL)
     cfg = config().config
     api = BilibiliApi(cfg['SESSDATA'], cfg['bili_jct'])
-    if (cfg['freq'] < 30):
+    if (cfg['freq'] < 15):
         raise Exception(ValueError, '时间太短了，不行')
     while(1):
         fans = api.getFans()
@@ -88,4 +87,4 @@ if __name__ == '__main__':
             res = api.setSignature()
             print("[%s]当前粉丝数: %d, 返回: %s" % (getCurrTime(), fans, res.text))
             api.setLastFans(fans)
-        sleep(cfg['freq'] + random.randint(3,10))
+        sleep(cfg['freq'] + random.randint(3, 10))
