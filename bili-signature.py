@@ -62,7 +62,7 @@ class BilibiliApi(object):
         return requests.post(url=self.setSignatureUrl, params=self.params, headers=self.headers, timeout=10)
 
 #配置文件管理
-class config(object):
+class Config(object):
     #初始化配置
     def initConfig(self):
         try:
@@ -71,7 +71,7 @@ class config(object):
                 fp.close()
                 return data
         except Exception:
-            print('文件读取失败')
+            print('配置读取失败,请确保你已将config.json.template重命名为config.json')
             exit()
     
     def __init__(self):
@@ -154,7 +154,7 @@ if __name__ == '__main__':
         | {Fore.LIGHTCYAN_EX}本程序可以根据自己的哔哩哔哩账号的粉丝数，自动更改您的个人简介。     {Fore.LIGHTMAGENTA_EX}| 
         ╰──────────────────────────────────────────────────────────────────────╯
                                         V{VERSION}{Style.RESET_ALL}""")
-    cfg = config().config
+    cfg = Config().config
     api = BilibiliApi(cfg['SESSDATA'], cfg['bili_jct'])
     sign = Signature(cfg)
     if (cfg['freq'] < 15):

@@ -14,7 +14,9 @@ This program changes your Bilibili signature depending on your account fans data
 
 ## 🚀Usage
 
-Run ``python bili-signature.py``
+First, **rename ``config.json.template`` to ``config.json``.**
+
+Then, Run ``python bili-signature.py``!
 
 ## ⚙Configuration
 

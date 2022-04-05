@@ -14,7 +14,9 @@
 
 ## 🚀使用方法
 
-运行 ``python bili-signature.py``
+首先**把 ``config.json.template`` 重命名为 ``config.json``.**
+
+然后运行 ``python bili-signature.py``!
 
 ## ⚙配置文件
 
