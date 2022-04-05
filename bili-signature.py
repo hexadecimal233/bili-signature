@@ -6,6 +6,7 @@ import random
 import requests
 from rpnpy import Calculator
 import signal
+from sys import exit
 from time import sleep
 
 VERSION = '2.0'
