@@ -1,18 +1,19 @@
 #导入依赖
+from colorama import *
 import datetime
-from distutils.log import debug
 import json
 import random
-from tkinter import EXCEPTION
 import requests
-from colorama import *
-from time import sleep
 from rpnpy import Calculator
+import signal
+from time import sleep
+
 
 class BilibiliApi(object):
     #调试模式
     debug = False
     debugFans = 1984
+
     #上一粉丝数
     __fans = 0
 
@@ -32,7 +33,7 @@ class BilibiliApi(object):
     
     #初始化Headers
     def initHeaders(self, sessdata, bilijct):
-        cookies = "SESSDATA=%s; bili_jct=%s" % (sessdata, bilijct)
+        cookies = 'SESSDATA=%s; bili_jct=%s' % (sessdata, bilijct)
         self.headers = {
             'Cookie': cookies,
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36'
@@ -50,20 +51,26 @@ class BilibiliApi(object):
     def getFans(self):
         response = requests.get(url=self.getFansUrl, headers=self.headers, timeout=10).json()
         if (response['code'] != 0):
-            raise Exception(ValueError, '粉丝数获取错误')
+            print('粉丝数获取错误')
+            exit()
         return response['data']['follower']
 
     #修改账号个人简介
     def setSignature(self):
         return requests.post(url=self.setSignatureUrl, params=self.params, headers=self.headers, timeout=10)
 
+#配置文件管理
 class config(object):
     #初始化配置
     def initConfig(self):
-        with open('./config.json','r',encoding='utf8') as fp:
-            data = json.load(fp)
-            fp.close()
-            return data
+        try:
+            with open('./config.json','r',encoding='utf8') as fp:
+                data = json.load(fp)
+                fp.close()
+                return data
+        except Exception:
+            print('文件读取失败')
+            exit()
     
     def __init__(self):
         self.config = self.initConfig()
@@ -75,29 +82,33 @@ def getCurrTime():
 
 #符号转为比大小
 def compare(symbol, a, b):
-    if symbol == ">=":
+    if symbol == '>=':
         return a >= b
-    elif symbol == ">":
+    elif symbol == '>':
         return a > b
-    elif symbol == "<=":
+    elif symbol == '<=':
         return a <= b
-    elif symbol == "<":
+    elif symbol == '<':
         return a < b
-    elif symbol == "=":
+    elif symbol == '=':
         return a >= b
-    else: raise Exception(ValueError,"错误")
+    else: 
+        print('json解析错误')
+        exit()
 
 #个人简介处理
 class Signature(object):
     def __init__(self, cfg):
         self.basic = cfg['signature']
         self.cfg = cfg['advanced']
+
     #计算逆波兰表达式
     def processRPN(self, input):
         calc = Calculator()
         calc.execute(input)
         (result,) = calc.stack
         return result
+
     #获取简介
     def getSignature(self, fans):
         cfg = self.cfg
@@ -105,6 +116,7 @@ class Signature(object):
             return self.basic % (fans + 1)
         else:
             return self.getSignature2(fans, cfg)
+
     #获取简介2，真正的获取简介，支持套娃
     def getSignature2(self, fans, cfg):
         processedRPN = self.processRPN(cfg['RPN'] % fans)
@@ -125,35 +137,42 @@ class Signature(object):
                 RPNResult = self.processRPN(cfg['ifFalse']['RPN'] % fans)
                 return cfg['ifFalse']['text'] % RPNResult
 
-        
+#Ctrl+C处理       
+def _exit(signum, frame):
+    print('停止中...')
+    exit()
+signal.signal(signal.SIGINT, _exit)
+signal.signal(signal.SIGTERM, _exit)
 
-
+'''主程序入口'''
 if __name__ == '__main__':
-    print(rf"""
-        {Fore.LIGHTMAGENTA_EX}╭──────────────────────────────────────────────────────────────────────╮
+    #打印介绍
+    print(rf"""        {Fore.LIGHTMAGENTA_EX}╭──────────────────────────────────────────────────────────────────────╮
         | {Fore.LIGHTCYAN_EX}哔哩哔哩自动更改个人简介 原作者: wuziqian211 二改者: ThebestkillerTBK{Fore.LIGHTMAGENTA_EX}| 
         | {Fore.LIGHTCYAN_EX}本程序可以根据自己的哔哩哔哩账号的粉丝数，自动更改您的个人简介。     {Fore.LIGHTMAGENTA_EX}| 
-        ╰──────────────────────────────────────────────────────────────────────╯
-    """)
-    print(Style.RESET_ALL)
+        ╰──────────────────────────────────────────────────────────────────────╯{Style.RESET_ALL}""")
     cfg = config().config
     api = BilibiliApi(cfg['SESSDATA'], cfg['bili_jct'])
     sign = Signature(cfg)
     if (cfg['freq'] < 15):
-        raise Exception(ValueError, '时间太短了，不行')
+        print('时间太短了:3')
+        exit()
+    
     #调试模式，用来测试高级模式
     if api.debug:
         fans = api.debugFans
-        sign_ = sign.getSignature(fans)
-        print("当前粉丝数: %d, 将要设置签名 %s" % (fans, sign_))
+        _sign = sign.getSignature(fans)
+        print('当前粉丝数: %d, 将要设置签名 %s' % (fans, _sign))
         exit()
+
+    #主循环
     while(1):
         fans = api.getFans()
         if (fans != api.getLastFans()):
-            sign_ = sign.getSignature(fans)
+            _sign = sign.getSignature(fans)
             api.initParams(sign, cfg['SESSDATA'], cfg['bili_jct'])
-            print("[%s]当前粉丝数: %d, 将要设置签名 %s" % (getCurrTime(), fans, sign_))
+            print('[%s]当前粉丝数: %d, 将要设置签名 %s' % (getCurrTime(), fans, _sign))
             res = api.setSignature().text
-            print("[%s]当前粉丝数: %d, 返回: %s" % (getCurrTime(), fans, res))
+            print('[%s]当前粉丝数: %d, 返回: %s' % (getCurrTime(), fans, res))
             api.setLastFans(fans)
         sleep(cfg['freq'] + random.randint(3, 10))
