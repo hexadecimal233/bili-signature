@@ -8,6 +8,7 @@ from rpnpy import Calculator
 import signal
 from time import sleep
 
+VERSION = '2.0'
 
 class BilibiliApi(object):
     #调试模式
@@ -150,7 +151,8 @@ if __name__ == '__main__':
     print(rf"""        {Fore.LIGHTMAGENTA_EX}╭──────────────────────────────────────────────────────────────────────╮
         | {Fore.LIGHTCYAN_EX}哔哩哔哩自动更改个人简介 原作者: wuziqian211 二改者: ThebestkillerTBK{Fore.LIGHTMAGENTA_EX}| 
         | {Fore.LIGHTCYAN_EX}本程序可以根据自己的哔哩哔哩账号的粉丝数，自动更改您的个人简介。     {Fore.LIGHTMAGENTA_EX}| 
-        ╰──────────────────────────────────────────────────────────────────────╯{Style.RESET_ALL}""")
+        ╰──────────────────────────────────────────────────────────────────────╯
+                                        V{VERSION}{Style.RESET_ALL}""")
     cfg = config().config
     api = BilibiliApi(cfg['SESSDATA'], cfg['bili_jct'])
     sign = Signature(cfg)
