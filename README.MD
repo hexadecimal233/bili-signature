@@ -32,6 +32,7 @@ Run ``python bili-signature.py``
 * ``value`` The value the result will compare with.
 * ``ifTrue`` The signature when it returns true.
 * ``ifFalse`` The signature when it returns false.
+* The two keys above, ``text``is your signature, %d is fans number, ``RPN`` is Reversed Polish Notation.
 
 ## 🚗Running
 

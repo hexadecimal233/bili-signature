@@ -2,5 +2,19 @@
     "SESSDATA": "0",
     "bili_jct": "0",
     "freq": 60,
-    "signature":"一个可爱的 UP 主 awa 你愿意成为我的第%d个粉丝吗 qwq"
+    "signature": "一个可爱的 UP 主 awa 你愿意成为我的第%d个粉丝吗 qwq",
+    "advanced": {
+        "enabled": false,
+        "RPN": "%d",
+        "type": ">=",
+        "value": 2000,
+        "ifTrue": {
+            "text": "破两千粉了！一个可爱的 UP 主 awa 你愿意成为我的第%d个粉丝吗 qwq",
+            "RPN": "%d 1 +"
+        },
+        "ifFalse": {
+            "text": "一个可爱的 UP 主 awa 离2000粉还有%d个 qwq",
+            "RPN": "2000 %d -"
+        }
+    }
 }

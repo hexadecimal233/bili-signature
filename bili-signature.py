@@ -5,6 +5,7 @@ import random
 import requests
 from colorama import *
 from time import sleep
+from rpnpy import Calculator
 
 class BilibiliApi(object):
     #上一粉丝数
@@ -66,6 +67,23 @@ def getCurrTime():
     nowTime = datetime.datetime.now()
     return nowTime.strftime('%m-%d-%H:%M:%S')
 
+
+#个人简介处理
+class Signature(object):
+    def __init__(self, cfg):
+        self.basic = cfg['signature']
+        self.config = cfg['advanced']
+    def processRPN(self, input):
+        calc = Calculator()
+        calc.execute(input)
+        (result,) = calc.stack
+        print(result)
+    def getSignature(self, fans):
+        if (not self.config['enabled']):
+            return self.basic % (fans + 1)
+        #else
+
+
 if __name__ == '__main__':
     print(rf"""
         {Fore.LIGHTMAGENTA_EX}╭──────────────────────────────────────────────────────────────────────╮
@@ -76,12 +94,13 @@ if __name__ == '__main__':
     print(Style.RESET_ALL)
     cfg = config().config
     api = BilibiliApi(cfg['SESSDATA'], cfg['bili_jct'])
+    sign = Signature(cfg)
     if (cfg['freq'] < 15):
         raise Exception(ValueError, '时间太短了，不行')
     while(1):
         fans = api.getFans()
         if (fans != api.getLastFans()):
-            sign = cfg['signature'] % (fans + 1)
+            sign = sign.getSignature()
             api.initParams(sign, cfg['SESSDATA'], cfg['bili_jct'])
             print("[%s]当前粉丝数: %d, 将要设置签名 %s" % (getCurrTime(), fans, sign))
             res = api.setSignature()
