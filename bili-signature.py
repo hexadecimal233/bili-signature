@@ -68,10 +68,12 @@ class config(object):
     def __init__(self):
         self.config = self.initConfig()
 
+#获取当前时间字符串
 def getCurrTime():
     nowTime = datetime.datetime.now()
     return nowTime.strftime('%m-%d-%H:%M:%S')
 
+#符号转为比大小
 def compare(symbol, a, b):
     if symbol == ">=":
         return a >= b
@@ -90,11 +92,13 @@ class Signature(object):
     def __init__(self, cfg):
         self.basic = cfg['signature']
         self.cfg = cfg['advanced']
+    #计算逆波兰表达式
     def processRPN(self, input):
         calc = Calculator()
         calc.execute(input)
         (result,) = calc.stack
         return result
+    #获取简介
     def getSignature(self, fans):
         cfg = self.cfg
         if (not cfg['enabled']):
@@ -102,7 +106,7 @@ class Signature(object):
         else:
             baseRPN = self.processRPN(cfg['RPN'] % fans)
             return self.getSignature2(fans, cfg, baseRPN)
-
+    #获取简介2，真正的获取简介，支持套娃
     def getSignature2(self, fans, cfg, baseRPN):
         if (compare(cfg['type'], baseRPN, cfg['value'])):
             RPNResult = self.processRPN(cfg['ifTrue']['RPN'] % fans)
@@ -129,6 +133,7 @@ if __name__ == '__main__':
     sign = Signature(cfg)
     if (cfg['freq'] < 15):
         raise Exception(ValueError, '时间太短了，不行')
+    #调试模式，用来测试高级模式
     if api.debug:
         fans = api.debugFans
         sign_ = sign.getSignature(fans)
