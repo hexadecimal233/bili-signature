@@ -11,8 +11,8 @@ from rpnpy import Calculator
 
 class BilibiliApi(object):
     #调试模式
-    debug = False
-    debugFans = 2000
+    debug = True
+    debugFans = 1984
     #上一粉丝数
     __fans = 0
 
@@ -104,18 +104,26 @@ class Signature(object):
         if (not cfg['enabled']):
             return self.basic % (fans + 1)
         else:
-            baseRPN = self.processRPN(cfg['RPN'] % fans)
-            return self.getSignature2(fans, cfg, baseRPN)
+            return self.getSignature2(fans, cfg)
     #获取简介2，真正的获取简介，支持套娃
-    def getSignature2(self, fans, cfg, baseRPN):
-        if (compare(cfg['type'], baseRPN, cfg['value'])):
-            RPNResult = self.processRPN(cfg['ifTrue']['RPN'] % fans)
-            return cfg['ifTrue']['text'] % RPNResult
+    def getSignature2(self, fans, cfg):
+        processedRPN = self.processRPN(cfg['RPN'] % fans)
+        if (compare(cfg['type'], processedRPN, cfg['value'])):
+            if 'tw' in cfg['ifTrue']:
+                return self.getSignature2(fans, cfg['ifTrue']['tw'])
+            if cfg['ifTrue']['formatted'] == True:
+                return cfg['ifTrue']['text']
+            else:
+                RPNResult = self.processRPN(cfg['ifTrue']['RPN'] % fans)
+                return cfg['ifTrue']['text'] % RPNResult
         else:
             if 'tw' in cfg['ifFalse']:
-                return self.getSignature2(fans, cfg['ifFalse']['tw'], baseRPN)
-            RPNResult = self.processRPN(cfg['ifFalse']['RPN'] % fans)
-            return cfg['ifFalse']['text'] % RPNResult
+                return self.getSignature2(fans, cfg['ifFalse']['tw'])
+            if cfg['ifFalse']['formatted'] == True:
+                return cfg['ifFalse']['text']
+            else:
+                RPNResult = self.processRPN(cfg['ifFalse']['RPN'] % fans)
+                return cfg['ifFalse']['text'] % RPNResult
 
         
 

@@ -4,21 +4,35 @@
     "freq": 60,
     "signature": "一个可爱的 UP 主 awa 你愿意成为我的第%d个粉丝吗 qwq",
     "advanced": {
-        "enabled": false,
+        "enabled": true,
         "RPN": "%d",
         "type": ">=",
         "value": 2000,
         "ifTrue": {
+            "formatted": false,
             "text": "破两千粉了！一个可爱的 UP 主 awa 你愿意成为我的第%d个粉丝吗 qwq",
             "RPN": "%d 1 +"
         },
         "ifFalse": {
             "tw": {
+                "RPN": "%d",
                 "type": ">=",
                 "value": 1500,
                 "ifTrue": {
-                    "text": "超过1500粉了！一个可爱的 UP 主 awa 离2000粉还有%d个 qwq",
-                    "RPN": "%d 1 +"
+                    "tw": {
+                        "RPN": "%d 2 mod",
+                        "type": "=",
+                        "value": 1,
+                        "ifTrue": {
+                            "formatted": true,
+                            "text": "超过1500粉了！快把我点赞弄成双数awa"
+                        },
+                        "ifFalse": {
+                            "formatted": false,
+                            "text": "超过1500粉了！离2000粉还有%d个 qwq",
+                            "RPN": "2000 %d -"
+                        }
+                    }
                 },
                 "ifFalse": {
                     "text": "一个可爱的 UP 主 awa 离2000粉还有%d个 qwq",

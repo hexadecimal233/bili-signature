@@ -30,14 +30,15 @@ Run ``python bili-signature.py``
 * ``RPN`` Reversed Polish Notation, %d is fans count.
 * ``type`` Criteria: >=,>,<=,<,= 。
 * ``value`` The value the result will compare with. ONLY integers. (RPN type value)
-* ``ifTrue`` The signature when it returns true. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.
-* ``ifFalse`` The signature when it returns false. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.
-* If ``tw`` is in ``ifFalse``, it will go into a new criteria.
+* ``ifTrue`` The signature when it returns true. ``formatted`` formatted text, RPN can be removed when true. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.
+* ``ifFalse`` The signature when it returns false. ``formatted`` formatted text, RPN can be removed when true. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.
+* If ``tw`` is in ``ifFalse``, it will go into a new criteria. Other arguments can be removed.
+* *``RPN`` Reversed Polish Notation, %d is fans count.*
 * *``type`` Criteria: >=,>,<=,<,= 。*
 * *``value`` The value the result will compare with. ONLY integers. (RPN type value)*
-* *``ifTrue`` The signature when it returns true. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.*
-* *``ifFalse`` The signature when it returns false. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.*
-* *If ``tw`` is in ``ifFalse``, it will go into a new criteria.*
+* *``ifTrue`` The signature when it returns true. ``formatted`` formatted text, RPN can be removed when true. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.*
+* *``ifFalse`` The signature when it returns false. ``formatted`` formatted text, RPN can be removed when true. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.*
+* *If ``tw`` is in ``ifFalse``, it will go into a new criteria. Other arguments can be removed.*
 
 ## 🚗Running
 
