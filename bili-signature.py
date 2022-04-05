@@ -74,6 +74,7 @@ if __name__ == '__main__':
         | {Fore.LIGHTCYAN_EX}本程序可以根据自己的哔哩哔哩账号的粉丝数，自动更改您的个人简介。    {Fore.LIGHTMAGENTA_EX}| 
         ╰─────────────────────────────────────────────────────────────────────╯
     """)
+    print(Style.RESET_ALL)
     cfg = config().config
     api = BilibiliApi(cfg['SESSDATA'], cfg['bili_jct'])
     if (cfg['freq'] < 30):
