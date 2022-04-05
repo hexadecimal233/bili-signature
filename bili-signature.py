@@ -2,6 +2,7 @@
 import datetime
 import json
 import random
+from tkinter import EXCEPTION
 import requests
 from colorama import *
 from time import sleep
@@ -67,6 +68,18 @@ def getCurrTime():
     nowTime = datetime.datetime.now()
     return nowTime.strftime('%m-%d-%H:%M:%S')
 
+def compare(symbol, a, b):
+    if symbol == ">=":
+        return a >= b
+    elif symbol == ">":
+        return a > b
+    elif symbol == "<=":
+        return a <= b
+    elif symbol == "<":
+        return a < b
+    elif symbol == "=":
+        return a >= b
+    else: raise Exception(ValueError,"错误")
 
 #个人简介处理
 class Signature(object):
@@ -77,11 +90,17 @@ class Signature(object):
         calc = Calculator()
         calc.execute(input)
         (result,) = calc.stack
-        print(result)
+        return result
     def getSignature(self, fans):
-        if (not self.config['enabled']):
+        cfg = self.config
+        if (not cfg['enabled']):
             return self.basic % (fans + 1)
-        #else
+        else:
+            if (compare(cfg['type'], self.processRPN(cfg['RPN'] % fans), cfg['value'])):
+                return cfg['ifTrue']['text'] % self.processRPN(cfg['ifTrue']['RPN'] % fans)
+            else:
+                return cfg['ifFalse']['text'] % self.processRPN(cfg['ifFalse']['RPN'] % fans)
+        
 
 
 if __name__ == '__main__':
@@ -100,7 +119,7 @@ if __name__ == '__main__':
     while(1):
         fans = api.getFans()
         if (fans != api.getLastFans()):
-            sign = sign.getSignature()
+            sign = sign.getSignature(fans)
             api.initParams(sign, cfg['SESSDATA'], cfg['bili_jct'])
             print("[%s]当前粉丝数: %d, 将要设置签名 %s" % (getCurrTime(), fans, sign))
             res = api.setSignature()
