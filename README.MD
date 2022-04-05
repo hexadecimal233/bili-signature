@@ -24,6 +24,15 @@ Run ``python bili-signature.py``
 
 ``signature`` Your personal signature. %d is the fans count.
 
+``advanced`` Conditional mode.
+
+* ``enabled`` Whether Advanced mode is enabled.
+* ``RPN`` Reversed Polish Notation.
+* ``type`` Change signature based on condition when result >=,>,<=,<,= compared value。
+* ``value`` The value the result will compare with.
+* ``ifTrue`` The signature when it returns true.
+* ``ifFalse`` The signature when it returns false.
+
 ## 🚗Running
 
 * Run ``pip install -r requirements.txt``.
