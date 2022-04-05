@@ -27,12 +27,17 @@ Run ``python bili-signature.py``
 ``advanced`` Conditional mode.
 
 * ``enabled`` Whether Advanced mode is enabled.
-* ``RPN`` Reversed Polish Notation.
-* ``type`` Change signature based on condition when result >=,>,<=,<,= compared value。
+* ``RPN`` Reversed Polish Notation, %d is fans count.
+* ``type`` Criteria: >=,>,<=,<,= 。
 * ``value`` The value the result will compare with. ONLY integers. (RPN type value)
-* ``ifTrue`` The signature when it returns true.
-* ``ifFalse`` The signature when it returns false.
-* The two keys above, ``text``is your signature, %d is fans number, ``RPN`` is Reversed Polish Notation.
+* ``ifTrue`` The signature when it returns true. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.
+* ``ifFalse`` The signature when it returns false. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.
+* If ``tw`` is in ``ifFalse``, it will go into a new criteria.
+* *``type`` Criteria: >=,>,<=,<,= 。*
+* *``value`` The value the result will compare with. ONLY integers. (RPN type value)*
+* *``ifTrue`` The signature when it returns true. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.*
+* *``ifFalse`` The signature when it returns false. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.*
+* *If ``tw`` is in ``ifFalse``, it will go into a new criteria.*
 
 ## 🚗Running
 

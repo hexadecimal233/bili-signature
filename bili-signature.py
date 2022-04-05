@@ -1,5 +1,6 @@
 #导入依赖
 import datetime
+from distutils.log import debug
 import json
 import random
 from tkinter import EXCEPTION
@@ -9,6 +10,9 @@ from time import sleep
 from rpnpy import Calculator
 
 class BilibiliApi(object):
+    #调试模式
+    debug = False
+    debugFans = 2000
     #上一粉丝数
     __fans = 0
 
@@ -85,21 +89,30 @@ def compare(symbol, a, b):
 class Signature(object):
     def __init__(self, cfg):
         self.basic = cfg['signature']
-        self.config = cfg['advanced']
+        self.cfg = cfg['advanced']
     def processRPN(self, input):
         calc = Calculator()
         calc.execute(input)
         (result,) = calc.stack
         return result
     def getSignature(self, fans):
-        cfg = self.config
+        cfg = self.cfg
         if (not cfg['enabled']):
             return self.basic % (fans + 1)
         else:
-            if (compare(cfg['type'], self.processRPN(cfg['RPN'] % fans), cfg['value'])):
-                return cfg['ifTrue']['text'] % self.processRPN(cfg['ifTrue']['RPN'] % fans)
-            else:
-                return cfg['ifFalse']['text'] % self.processRPN(cfg['ifFalse']['RPN'] % fans)
+            baseRPN = self.processRPN(cfg['RPN'] % fans)
+            return self.getSignature2(fans, cfg, baseRPN)
+
+    def getSignature2(self, fans, cfg, baseRPN):
+        if (compare(cfg['type'], baseRPN, cfg['value'])):
+            RPNResult = self.processRPN(cfg['ifTrue']['RPN'] % fans)
+            return cfg['ifTrue']['text'] % RPNResult
+        else:
+            if 'tw' in cfg['ifFalse']:
+                return self.getSignature2(fans, cfg['ifFalse']['tw'], baseRPN)
+            RPNResult = self.processRPN(cfg['ifFalse']['RPN'] % fans)
+            return cfg['ifFalse']['text'] % RPNResult
+
         
 
 
@@ -116,13 +129,18 @@ if __name__ == '__main__':
     sign = Signature(cfg)
     if (cfg['freq'] < 15):
         raise Exception(ValueError, '时间太短了，不行')
+    if api.debug:
+        fans = api.debugFans
+        sign_ = sign.getSignature(fans)
+        print("当前粉丝数: %d, 将要设置签名 %s" % (fans, sign_))
+        exit()
     while(1):
         fans = api.getFans()
         if (fans != api.getLastFans()):
-            sign = sign.getSignature(fans)
+            sign_ = sign.getSignature(fans)
             api.initParams(sign, cfg['SESSDATA'], cfg['bili_jct'])
-            print("[%s]当前粉丝数: %d, 将要设置签名 %s" % (getCurrTime(), fans, sign))
-            res = api.setSignature()
-            print("[%s]当前粉丝数: %d, 返回: %s" % (getCurrTime(), fans, res.text))
+            print("[%s]当前粉丝数: %d, 将要设置签名 %s" % (getCurrTime(), fans, sign_))
+            res = api.setSignature().text
+            print("[%s]当前粉丝数: %d, 返回: %s" % (getCurrTime(), fans, res))
             api.setLastFans(fans)
         sleep(cfg['freq'] + random.randint(3, 10))

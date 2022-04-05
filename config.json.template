@@ -13,8 +13,18 @@
             "RPN": "%d 1 +"
         },
         "ifFalse": {
-            "text": "一个可爱的 UP 主 awa 离2000粉还有%d个 qwq",
-            "RPN": "2000 %d -"
+            "tw": {
+                "type": ">=",
+                "value": 1500,
+                "ifTrue": {
+                    "text": "超过1500粉了！一个可爱的 UP 主 awa 离2000粉还有%d个 qwq",
+                    "RPN": "%d 1 +"
+                },
+                "ifFalse": {
+                    "text": "一个可爱的 UP 主 awa 离2000粉还有%d个 qwq",
+                    "RPN": "2000 %d -"
+                }
+            }
         }
     }
 }
