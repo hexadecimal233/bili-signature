@@ -8,6 +8,8 @@ A Python port for [wuziqian211/bili-auto-change-sign](https://github.com/wuziqia
 
 ## ❓Introduction
 
+Bilibili signature auto change: A flexible automation tool that changes your Bilibili signature
+
 This program changes your Bilibili signature depending on your account fans data.
 
 ## 🚀Usage
@@ -20,7 +22,7 @@ Run ``python bili-signature.py``
 
 ``bili_jct`` Your bili_jct.
 
-``freq`` Update frequency (In seconds). Too low may trigger the anti-bot system.
+``freq`` **Update frequency (In seconds). Too low may trigger the anti-bot system.**
 
 ``signature`` Your personal signature. %d is the fans count.
 
@@ -32,13 +34,13 @@ Run ``python bili-signature.py``
 * ``value`` The value the result will compare with. ONLY integers. (RPN type value)
 * ``ifTrue`` The signature when it returns true. ``formatted`` formatted text, RPN can be removed when true. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.
 * ``ifFalse`` The signature when it returns false. ``formatted`` formatted text, RPN can be removed when true. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.
-* If ``tw`` is in ``ifFalse``, it will go into a new criteria. Other arguments can be removed.
+* If ``tw`` is in ``ifFalse``, it will go into a new loop. Other arguments can be removed.
 * *``RPN`` Reversed Polish Notation, %d is fans count.*
 * *``type`` Criteria: >=,>,<=,<,= 。*
 * *``value`` The value the result will compare with. ONLY integers. (RPN type value)*
 * *``ifTrue`` The signature when it returns true. ``formatted`` formatted text, RPN can be removed when true. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.*
 * *``ifFalse`` The signature when it returns false. ``formatted`` formatted text, RPN can be removed when true. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.*
-* *If ``tw`` is in ``ifFalse``, it will go into a new criteria. Other arguments can be removed.*
+* *If ``tw`` is in ``ifFalse``, it will go into a new loop. Other arguments can be removed.*
 
 ## 🚗Running
 
@@ -48,7 +50,7 @@ Run ``python bili-signature.py``
 
 ## ✔Notice
 
-🍪 How to get cookies: Use your favorite browser to get it.
+🍪 **How to get cookies: Use your favorite browser to get it.**
 
 ⭐ If you enjoy the program, you can  ``star`` to support this program!
 

@@ -11,7 +11,7 @@ from rpnpy import Calculator
 
 class BilibiliApi(object):
     #调试模式
-    debug = True
+    debug = False
     debugFans = 1984
     #上一粉丝数
     __fans = 0
