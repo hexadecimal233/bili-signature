@@ -2,7 +2,7 @@
 
 ![GitHub stars](https://img.shields.io/github/stars/ThebestkillerTBK/bili-signature?style=flat)![GitHub stars](https://img.shields.io/github/forks/ThebestkillerTBK/bili-signature?style=flat)
 
-[English](README-zh.md) | 中文
+[English](README.md) | 中文
 
 [wuziqian211/bili-auto-change-sign](https://github.com/wuziqian211/bili-auto-change-sign)的Python版。
 
