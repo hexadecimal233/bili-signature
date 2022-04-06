@@ -13,7 +13,7 @@ VERSION = '2.0'
 
 class BilibiliApi(object):
     #调试模式
-    debug = True
+    debug = False
     debugFans = 2003
 
     #上一粉丝数
