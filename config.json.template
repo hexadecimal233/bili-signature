@@ -3,29 +3,63 @@
     "bili_jct": "0",
     "freq": 60,
     "signature": "一个可爱的 UP 主 awa 你愿意成为我的第%d个粉丝吗 qwq",
+    "advancedMode": true,
     "advanced": {
-        "enabled": true,
-        "RPN": "%d",
-        "type": ">=",
-        "value": 2000,
+        "criteria": {
+            "fans": {
+                "RPN": "%d",
+                "type": ">=",
+                "value": 2000
+            }
+        },
         "ifTrue": {
-            "formatted": false,
-            "text": "破两千粉了！一个可爱的 UP 主 awa 你愿意成为我的第%d个粉丝吗 qwq",
-            "RPN": "%d 1 +"
+            "data": [
+                {
+                    "formatted": false,
+                    "text": "破两千粉了！一个可爱的 UP 主 awa 你愿意成为我的第%d个粉丝吗 qwq",
+                    "RPN": "%d 1 +"
+                },
+                {
+                    "formatted": true,
+                    "text": "喵~"
+                }
+            ]
         },
         "ifFalse": {
             "tw": {
-                "RPN": "%d",
-                "type": ">=",
-                "value": 1500,
+                "criteria": {
+                    "fans": {
+                        "RPN": "%d",
+                        "type": ">=",
+                        "value": 1500
+                    }
+                },
                 "ifTrue": {
                     "tw": {
-                        "RPN": "%d 2 mod",
-                        "type": "=",
-                        "value": 1,
+                        "criteria": {
+                            "fans": {
+                                "RPN": "%d 2 mod",
+                                "type": "=",
+                                "value": 1
+                            }
+                        },
                         "ifTrue": {
-                            "formatted": true,
-                            "text": "超过1500粉了！快把我点赞弄成双数awa"
+                            "tw": {
+                                "criteria": {
+                                    "time": {
+                                        "time": "12:00",
+                                        "type": "<"
+                                    }
+                                },
+                                "ifTrue": {
+                                    "formatted": true,
+                                    "text": "上午好！超过1500粉了！快把我点赞弄成双数awa"
+                                },
+                                "ifFalse": {
+                                    "formatted": true,
+                                    "text": "下午好！超过1500粉了！快把我点赞弄成双数awa"
+                                }
+                            }
                         },
                         "ifFalse": {
                             "formatted": false,

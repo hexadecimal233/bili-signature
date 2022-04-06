@@ -1,59 +1,66 @@
-# Bilibili signature auto change
+# 哔哩哔哩自动更改个人简介
 
 ![GitHub stars](https://img.shields.io/github/stars/ThebestkillerTBK/bili-signature?style=flat)![GitHub stars](https://img.shields.io/github/forks/ThebestkillerTBK/bili-signature?style=flat)
 
-English | [中文](README-zh.md)
+[wuziqian211/bili-auto-change-sign](https://github.com/wuziqian211/bili-auto-change-sign)的Python版。
 
-A Python port for [wuziqian211/bili-auto-change-sign](https://github.com/wuziqian211/bili-auto-change-sign)
+## ❓介绍
 
-## ❓Introduction
+哔哩哔哩自动更改个人简介: 一个灵活的个人简介自动更改工具
 
-Bilibili signature auto change: A flexible automation tool that changes your Bilibili signature
+本程序可以根据自己的哔哩哔哩账号的粉丝数, 自动更改您的个人简介。
 
-This program changes your Bilibili signature depending on your account fans data.
+## 🚀使用方法
 
-## 🚀Usage
+首先**把 ``config.json.template`` 重命名为 ``config.json``.**
 
-First, **rename ``config.json.template`` to ``config.json``.**
+然后运行 ``python bili-signature.py``!
 
-Then, Run ``python bili-signature.py``!
+## ⚙配置文件
 
-## ⚙Configuration
+``SESSDATA`` 你的 SESSDATA.
 
-``SESSDATA`` Your SESSDATA.
+``bili_jct`` 你的 bili_jct.
 
-``bili_jct`` Your bili_jct.
+``freq`` **更新频率(秒). 太低会触发反爬虫系统.**
 
-``freq`` **Update frequency (In seconds). Too low may trigger the anti-bot system.**
+``signature`` 你的个人简介, %d是粉丝数.
 
-``signature`` Your personal signature. %d is the fans count.
+``advancedMode`` 是否高级开启模式.
 
-``advanced`` Conditional mode.
+##### ``advanced`` 用来判断条件.
 
-* ``enabled`` Whether Advanced mode is enabled.
-* ``RPN`` Reversed Polish Notation, %d is fans count.
-* ``type`` Criteria: >=,>,<=,<,= 。
-* ``value`` The value the result will compare with. ONLY integers. (RPN type value)
-* ``ifTrue`` The signature when it returns true. ``formatted`` formatted text, RPN can be removed when true. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.
-* ``ifFalse`` The signature when it returns false. ``formatted`` formatted text, RPN can be removed when true. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.
-* If ``tw`` is in ``ifFalse``, it will go into a new loop. Other arguments can be removed.
-* *``RPN`` Reversed Polish Notation, %d is fans count.*
-* *``type`` Criteria: >=,>,<=,<,= 。*
-* *``value`` The value the result will compare with. ONLY integers. (RPN type value)*
-* *``ifTrue`` The signature when it returns true. ``formatted`` formatted text, RPN can be removed when true. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.*
-* *``ifFalse`` The signature when it returns false. ``formatted`` formatted text, RPN can be removed when true. ``text`` is your signature, %d is fans count, ``RPN`` is Reversed Polish Notation.*
-* *If ``tw`` is in ``ifFalse``, it will go into a new loop. Other arguments can be removed.*
+* ``criteria`` 条件，有 ``time``, ``date``, ``fans``
 
-## 🚗Running
+  * 对于fans:
+    * ``RPN`` 逆波兰表达式, %d是粉丝数.
+    * ``type`` 当结果>=,>,<=,<,=当前时间，根据条件更改简介.
+    * ``value`` 与结果比较的值. 只支持整数. (RPN type value)
+  
+  * 对于time:
+    * ``time`` 时间. (HH:MM)
+    * ``type`` 当结果>=,>,<=,<,=比较的值时，根据条件更改简介.
+  
+* ``ifTrue`` 返回真时的简介. 
 
-* Run ``pip install -r requirements.txt``.
-* Edit ``config.json`` to configure the arguments.
-* Enjoy~
+* ``ifFalse`` 返回假时的简介.
 
-## ✔Notice
+* ###### 简介格式:
 
-🍪 **How to get cookies: Use your favorite browser to get it.**
+  * 如果上两个参数里有 ``tw`` 则进行套娃, 其中是 ``advanced``,  有``data``就会启用随机简介, (数组)其余参数可省略.
 
-⭐ If you enjoy the program, you can  ``star`` to support this program!
+* 参数和上面相同.
 
-🐛 If you find any bugs, feel free to create issues or pull requests.
+## 🚗运行
+
+* 运行 ``pip install -r requirements.txt``.
+* 编辑 ``config.json`` 来配置参数.
+* 享受吧~
+
+## ✔注意事项
+
+🍪 **如何获取cookies: 打开你的浏览器获取(这不用说谁都知道吧).**
+
+⭐ 如果喜欢的话请帮忙`star`支持一下！
+
+🐛 有Bug可以开Issue或PR

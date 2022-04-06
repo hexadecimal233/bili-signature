@@ -13,8 +13,8 @@ VERSION = '2.0'
 
 class BilibiliApi(object):
     #调试模式
-    debug = False
-    debugFans = 1984
+    debug = True
+    debugFans = 2003
 
     #上一粉丝数
     __fans = 0
@@ -95,14 +95,15 @@ def compare(symbol, a, b):
     elif symbol == '=':
         return a >= b
     else: 
-        print('json解析错误')
+        print('解析错误')
         exit()
 
 #个人简介处理
 class Signature(object):
     def __init__(self, cfg):
         self.basic = cfg['signature']
-        self.cfg = cfg['advanced']
+        self.advancedMode = cfg['advancedMode']
+        self.advancedCfg = cfg['advanced']
 
     #计算逆波兰表达式
     def processRPN(self, input):
@@ -113,31 +114,55 @@ class Signature(object):
 
     #获取简介
     def getSignature(self, fans):
-        cfg = self.cfg
-        if (not cfg['enabled']):
+        if (not self.advancedMode):
             return self.basic % (fans + 1)
         else:
-            return self.getSignature2(fans, cfg)
+            return self.getSignature2(self.advancedCfg, fans)
 
-    #获取简介2，真正的获取简介，支持套娃
-    def getSignature2(self, fans, cfg):
-        processedRPN = self.processRPN(cfg['RPN'] % fans)
-        if (compare(cfg['type'], processedRPN, cfg['value'])):
-            if 'tw' in cfg['ifTrue']:
-                return self.getSignature2(fans, cfg['ifTrue']['tw'])
-            if cfg['ifTrue']['formatted'] == True:
-                return cfg['ifTrue']['text']
-            else:
-                RPNResult = self.processRPN(cfg['ifTrue']['RPN'] % fans)
-                return cfg['ifTrue']['text'] % RPNResult
+    #格式化签名
+    def getText(self, condition, cfg, fans):
+        currCFG = cfg[condition]
+        return self.getText2(currCFG, fans)
+
+    #真正格式化签名
+    def getText2(self, cfg, fans):
+        if 'tw' in cfg:
+            return self.getSignature2(cfg['tw'], fans)
+        if 'data' in cfg:
+            return self.getText2(cfg['data'][random.randint(0, len(cfg['data'])-1)], fans)
+        if cfg['formatted'] == True:
+            return cfg['text']
         else:
-            if 'tw' in cfg['ifFalse']:
-                return self.getSignature2(fans, cfg['ifFalse']['tw'])
-            if cfg['ifFalse']['formatted'] == True:
-                return cfg['ifFalse']['text']
-            else:
-                RPNResult = self.processRPN(cfg['ifFalse']['RPN'] % fans)
-                return cfg['ifFalse']['text'] % RPNResult
+            RPNResult = self.processRPN(cfg['RPN'] % fans)
+            return cfg['text'] % RPNResult
+    
+    #解析条件
+    def parseCriteria(self, cfg, fans):
+        if 'time' in cfg:
+            timeCfg = cfg['time']
+            compared = datetime.datetime.strptime(timeCfg['time'],'%H:%M')
+            nowDaytime = datetime.datetime.strptime(datetime.datetime.now().strftime('%H:%M'),'%H:%M')
+            cond = compare(timeCfg['type'], nowDaytime, compared)
+            return cond
+        else: time_ = 1
+        if 'fans' in cfg:
+            fansCfg = cfg['fans']
+            fans_ = self.parseFansType(fansCfg['RPN'], fansCfg['type'], fansCfg['value'], fans)
+        else: fans_ = 1
+
+        return (fans_ and time_)
+
+    #解析粉丝
+    def parseFansType(self, RPN, criteria, value, fans):
+        processedRPN = self.processRPN(RPN % fans)
+        return compare(criteria, processedRPN, value)
+            
+    #获取简介2，真正的获取简介，支持套娃
+    def getSignature2(self, cfg, fans):
+        if (self.parseCriteria(cfg['criteria'], fans)):
+            return self.getText('ifTrue', cfg, fans)
+        else:
+            return self.getText('ifFalse', cfg, fans)
 
 #Ctrl+C处理       
 def _exit(signum, frame):
