@@ -9,12 +9,12 @@ import signal
 from sys import exit
 from time import sleep
 
-VERSION = '2.0'
+VERSION = '2.2'
 
 class BilibiliApi(object):
     #调试模式
     debug = False
-    debugFans = 2003
+    debugFans = 1994
 
     #上一粉丝数
     __fans = 0
@@ -143,14 +143,21 @@ class Signature(object):
             compared = datetime.datetime.strptime(timeCfg['time'],'%H:%M')
             nowDaytime = datetime.datetime.strptime(datetime.datetime.now().strftime('%H:%M'),'%H:%M')
             cond = compare(timeCfg['type'], nowDaytime, compared)
-            return cond
+            time_ = cond
         else: time_ = 1
+        if 'date' in cfg:
+            timeCfg = cfg['date']
+            compared = datetime.datetime.strptime(timeCfg['date'],'%Y-%m-%d')
+            nowDate = datetime.datetime.strptime(datetime.datetime.now().strftime('%Y-%m-%d'),'%Y-%m-%d')
+            cond = compare(timeCfg['type'], nowDate, compared)
+            date_ = cond
+        else: date_ = 1
         if 'fans' in cfg:
             fansCfg = cfg['fans']
             fans_ = self.parseFansType(fansCfg['RPN'], fansCfg['type'], fansCfg['value'], fans)
         else: fans_ = 1
 
-        return (fans_ and time_)
+        return (fans_ and time_ and date_)
 
     #解析粉丝
     def parseFansType(self, RPN, criteria, value, fans):

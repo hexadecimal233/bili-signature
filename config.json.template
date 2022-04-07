@@ -62,9 +62,22 @@
                             }
                         },
                         "ifFalse": {
-                            "formatted": false,
-                            "text": "超过1500粉了！离2000粉还有%d个 qwq",
-                            "RPN": "2000 %d -"
+                            "tw": {
+                                "criteria": {
+                                    "date": {
+                                        "date": "2022-4-10",
+                                        "type": "<"
+                                    }
+                                },
+                                "ifTrue": {
+                                    "formatted": true,
+                                    "text": "现在是四月十号之前~"
+                                },
+                                "ifFalse": {
+                                    "formatted": true,
+                                    "text": "现在是四月十号之后~"
+                                }
+                            }
                         }
                     }
                 },
