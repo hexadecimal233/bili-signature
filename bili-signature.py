@@ -9,7 +9,7 @@ import signal
 from sys import exit
 from time import sleep
 
-VERSION = '2.2'
+VERSION = '2.3'
 
 class BilibiliApi(object):
     #调试模式
@@ -205,7 +205,7 @@ if __name__ == '__main__':
         fans = api.getFans()
         if (fans != api.getLastFans()):
             _sign = sign.getSignature(fans)
-            api.initParams(sign, cfg['SESSDATA'], cfg['bili_jct'])
+            api.initParams(_sign, cfg['SESSDATA'], cfg['bili_jct'])
             print('[%s]当前粉丝数: %d, 将要设置签名 %s' % (getCurrTime(), fans, _sign))
             res = api.setSignature().text
             print('[%s]当前粉丝数: %d, 返回: %s' % (getCurrTime(), fans, res))
